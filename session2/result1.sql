@@ -1,8 +1,3 @@
-﻿DROP TABLE IF EXISTS problem1;
-
-CREATE TABLE problem1 (
-	task CHAR(1) PRIMARY KEY, result BOOLEAN, motivation VARCHAR(200));
-	
 INSERT INTO problem1 (task, result, motivation) VALUES 
 	('a',FALSE,'voertuig geeft een capaciteit aan, niet andersom'),
 	('b',TRUE,'zie 2, C van V'),

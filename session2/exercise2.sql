@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS r, f;
+
+CREATE TABLE r (a INT, b INT, c INT, d INT, e INT, f INT);
+
+CREATE TABLE f (x VARCHAR(10), y VARCHAR(10), violation BOOLEAN, motivation VARCHAR(200));
