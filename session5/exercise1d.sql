@@ -1,3 +1,3 @@
 UPDATE Boek b
-SET isbn = '2'
+SET isbn = '1'
 WHERE isbn = '0';
