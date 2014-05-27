@@ -6,13 +6,14 @@
 		NOT DEFERRABLE
 );
 
-CREATE TRIGGER newBookUnknownAuthor BEFORE INSERT
+CREATE TRIGGER newBookUnknownAuthor AFTER INSERT
 	ON Boek b
 	NOT DEFERRABLE INITIALLY IMMEDIATE
 	FOR EACH ROW
 	WHEN NOT EXISTS	(SELECT *
 					 FROM Boek b
-					 WHERE b.auteur = NEW.auteur)
+					 WHERE b.auteur = NEW.auteur
+					 AND b.isbn != NEW.isbn)
 	EXECUTE PROCEDURE	(INSERT INTO Bestelling (isbn, aantal)
 						 VALUES (NEW.isbn, 2))
 ;
