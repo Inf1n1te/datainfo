@@ -1,19 +1,22 @@
- CREATE TABLE Bestelling (
-	isbn varchar(20),
-	aantal integer,
-	FOREIGN KEY (isbn) REFERENCES Boek(isbn)
-		ON UPDATE CASCADE
-		NOT DEFERRABLE
+CREATE TABLE Bestelling(
+	isbn INT,
+	aantal INT,
+	FOREIGN KEY (isbn) REFERENCES Boek(isbn) ON UPDATE cascade ON DELETE cascade
 );
 
-CREATE TRIGGER newBookUnknownAuthor AFTER INSERT
-	ON Boek b
-	NOT DEFERRABLE INITIALLY IMMEDIATE
-	FOR EACH ROW
-	WHEN NOT EXISTS	(SELECT *
-					 FROM Boek b
-					 WHERE b.auteur = NEW.auteur
-					 AND b.isbn != NEW.isbn)
-	EXECUTE PROCEDURE	(INSERT INTO Bestelling (isbn, aantal)
-						 VALUES (NEW.isbn, 2))
-;
+
+CREATE FUNCTION voegbestellingtoe() 
+RETURNS TRIGGER
+AS $$ BEGIN
+	IF( 1 = (SELECT COUNT(auteur) FROM Boek WHERE NEW.auteur = boek.auteur)) THEN
+	INSERT INTO Bestelling(isbn, aantal)
+	VALUES(NEW.isbn, 0);
+	END IF;
+	RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+
+CREATE TRIGGER voegbestellingentoe AFTER INSERT ON Boek
+FOR EACH ROW EXECUTE PROCEDURE voegbestellingtoe();
